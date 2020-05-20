@@ -1,7 +1,7 @@
 ###########################
 # 6.0002 Problem Set 1a: Space Cows 
-# Name:
-# Collaborators:
+# Name: Chintan Singh
+# Collaborators: None
 # Time:
 
 from ps1_partition import get_partitions
@@ -25,7 +25,20 @@ def load_cows(filename):
     a dictionary of cow name (string), weight (int) pairs
     """
     # TODO: Your code here
-    pass
+    
+    
+    infile = open(filename, 'r') 
+    
+        
+    dict = {}
+    
+    for line in infile:
+        name,wt = line.split(",") #take each line in two variables
+        
+        dict[name] = int(wt) # create dictionary, convert wt from str to int
+        
+    return dict
+        
 
 # Problem 2
 def greedy_cow_transport(cows,limit=10):
@@ -51,8 +64,37 @@ def greedy_cow_transport(cows,limit=10):
     trips
     """
     # TODO: Your code here
-    pass
+    
+    dict = cows.copy() #shallow copy
+    
+    #sort to list using lambda in O(n*log n) time
+    sorted_cows = sorted(dict.items(),key = lambda x:(x[1],x[0]), reverse = True)
+    
+    # Loop variables
+    
+    output = []                #tranches are appended to this final output
+    
 
+    while len(sorted_cows) > 0:
+        tranche = []           #set of cows in each trip
+        idx_to_delete = []     #to delete cows in tranche from dictionary
+        payload = 0            #to check each tranche's weight
+        
+        for i in range(len(sorted_cows)):
+            
+            if (payload + sorted_cows[i][1] <= limit):
+                tranche.append(sorted_cows[i][0])
+                idx_to_delete.append(i)
+                payload += sorted_cows[i][1]
+                
+            
+        output.append(tranche)
+        
+        for j in idx_to_delete[::-1]:
+            del(sorted_cows[j])
+        
+    return output
+        
 # Problem 3
 def brute_force_cow_transport(cows,limit=10):
     """
@@ -76,8 +118,45 @@ def brute_force_cow_transport(cows,limit=10):
     trips
     """
     # TODO: Your code here
-    pass
+    
+    partitions = []
+    
+    #Creating a list of possible partitions
+    for partition in get_partitions(cows):
+        partitions.append(partition)
         
+    
+    partitions = sorted(partitions,key=lambda x:len(x))
+        
+    
+    combo = 0
+    ''' partitions is the set of all possible combinations.
+    Each combination has one or many tranches of cows that travel together
+    Each tranche has individual cows'''
+    for combination in partitions:
+        combination_failed = False
+        combo += 1
+        for tranche in combination:
+            
+            payload = 0
+            
+            for i in tranche:
+                payload += cows[i]
+                
+            if payload > limit:
+                combination_failed = True
+                continue
+        if combination_failed:
+            continue
+        else:
+            
+            return combination
+        
+                
+    
+            
+            
+                
 # Problem 4
 def compare_cow_transport_algorithms():
     """
@@ -94,3 +173,30 @@ def compare_cow_transport_algorithms():
     """
     # TODO: Your code here
     pass
+
+cows = load_cows("ps1_cow_data.txt")
+print(cows)
+
+start = time.time()
+
+for i in range(10,20):
+    
+    g = greedy_cow_transport(cows,i)
+    print("Greedy: Max Load: ",i, "length: ", len(g))
+
+end = time.time()    
+
+print("Time for Greedy: ", end-start)
+print()
+
+
+start = time.time()
+
+for i in range(10,20):
+    
+    b = brute_force_cow_transport(cows,i)
+    print("Brute Force: Max Load: ",i, "length: ", len(b))
+
+end = time.time()    
+print("Time for Brute Force: ", end-start)
+
