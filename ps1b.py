@@ -1,8 +1,8 @@
 ###########################
 # 6.0002 Problem Set 1b: Space Change
-# Name:
+# Name: Chintan Singh
 # Collaborators:
-# Time:
+# Time: 15 minutes
 # Author: charz, cdenise
 
 #================================
@@ -23,7 +23,32 @@ def dp_make_weight(egg_weights, target_weight, memo = {}):
     Returns: int, smallest number of eggs needed to make target weight
     """
     # TODO: Your code here
-    pass
+    
+    if target_weight == 0:
+        return 0
+    
+    min_steps = float('inf')
+    
+    try:
+        return memo[target_weight]
+    except KeyError:
+        
+        
+        for weight in egg_weights:
+            steps_reqd = 0
+            
+            #recursively copute steps required 
+            if target_weight >= weight:
+                steps_reqd = dp_make_weight(egg_weights,target_weight-weight,memo) + 1
+            
+                if steps_reqd < min_steps:
+                    min_steps = steps_reqd
+        
+        memo[target_weight] = min_steps
+        return min_steps
+        
+    
+        
 
 # EXAMPLE TESTING CODE, feel free to add more if you'd like
 if __name__ == '__main__':

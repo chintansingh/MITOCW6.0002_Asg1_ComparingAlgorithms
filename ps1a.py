@@ -2,7 +2,7 @@
 # 6.0002 Problem Set 1a: Space Cows 
 # Name: Chintan Singh
 # Collaborators: None
-# Time:
+# Time: about 2 hours
 
 from ps1_partition import get_partitions
 import time
@@ -153,9 +153,6 @@ def brute_force_cow_transport(cows,limit=10):
             return combination
         
                 
-    
-            
-            
                 
 # Problem 4
 def compare_cow_transport_algorithms():
@@ -172,31 +169,37 @@ def compare_cow_transport_algorithms():
     Does not return anything.
     """
     # TODO: Your code here
-    pass
-
-cows = load_cows("ps1_cow_data.txt")
-print(cows)
-
-start = time.time()
-
-for i in range(10,20):
     
-    g = greedy_cow_transport(cows,i)
-    print("Greedy: Max Load: ",i, "length: ", len(g))
-
-end = time.time()    
-
-print("Time for Greedy: ", end-start)
-print()
-
-
-start = time.time()
-
-for i in range(10,20):
+    cows = load_cows("ps1_cow_data.txt")
+    print(cows)
     
-    b = brute_force_cow_transport(cows,i)
-    print("Brute Force: Max Load: ",i, "length: ", len(b))
+    #Timing Greedy algorithms
+    start = time.time()
+    for i in range(10,20):    
+        g = greedy_cow_transport(cows,i)
+        print("Greedy: Max Load: ",i, "length: ", len(g))
 
-end = time.time()    
-print("Time for Brute Force: ", end-start)
+    end = time.time()
+    print("Time for Greedy: ", end-start)
+    
+    
+    print()
+
+    #Timing Brute Force Algorithm
+    start = time.time()
+    for i in range(10,20):
+        b = brute_force_cow_transport(cows,i)
+        print("Brute Force: Max Load: ",i, "length: ", len(b))
+
+    end = time.time()    
+    print("Time for Brute Force: ", end-start)
+
+
+
+
+
+if __name__ == '__main__':
+    compare_cow_transport_algorithms()
+
+
 
